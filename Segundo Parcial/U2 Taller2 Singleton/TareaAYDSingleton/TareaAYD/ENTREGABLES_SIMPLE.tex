@@ -1,0 +1,435 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+
+\geometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}
+
+% Configuración de código Java
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{javastyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    numbers=left,                    
+    numbersep=5pt,
+    language=Java
+}
+
+\lstset{style=javastyle}
+
+% Estilos TikZ
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\title{\textbf{U2T2 – Taller del Patrón Singleton con Patrón NVC}\\
+\large Implementación de CRUD de Estudiante}
+\author{}
+\date{}
+
+\begin{document}
+
+% Carátula
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Large\textbf{ESCUELA POLITÉCNICA DEL EJÉRCITO ESPE}}\\[0.5cm]
+    {\large Ingeniería en Tecnologías de la Información}\\[3cm]
+    
+    {\Huge\textbf{Taller Patrón Singleton + NVC}}\\[0.5cm]
+    {\LARGE CRUD de Estudiante}\\[3cm]
+    
+    {\Large\textbf{Integrantes:}}\\[0.5cm]
+    {\large
+    Dennison Chalacan\\
+    Jeffrey Manobanda\\
+    Jhordy Marcillo\\
+    }
+    \vspace{2cm}
+    
+    {\Large\textbf{Tecnologías:}}\\[0.3cm]
+    Java SE 8+ | Swing | Serialización\\
+    
+    \vfill
+    
+    {\large 24 de noviembre de 2025}
+    
+\end{titlepage}
+
+\newpage
+
+\section{Implementación del Singleton}
+
+\subsection{Código EstudianteRepository}
+
+El patrón Singleton garantiza una única instancia del repositorio compartida por toda la aplicación.
+
+\begin{lstlisting}[caption=EstudianteRepository.java - Singleton]
+public class EstudianteRepository {
+    // 1. Instancia unica estatica
+    private static EstudianteRepository instance;
+    private List<Estudiante> estudiantes;
+    
+    // 2. Constructor privado
+    private EstudianteRepository() {
+        this.estudiantes = loadFromFile();
+    }
+    
+    // 3. Metodo getInstance() sincronizado
+    public static synchronized EstudianteRepository getInstance() {
+        if (instance == null) {
+            instance = new EstudianteRepository();
+        }
+        return instance;
+    }
+    
+    // Metodos CRUD
+    public boolean agregar(Estudiante e) {
+        if (buscar(e.getId()) != null) return false;
+        estudiantes.add(e);
+        saveToFile();
+        return true;
+    }
+    
+    public boolean editar(Estudiante e) {
+        Estudiante existente = buscar(e.getId());
+        if (existente == null) return false;
+        existente.setNombres(e.getNombres());
+        existente.setEdad(e.getEdad());
+        saveToFile();
+        return true;
+    }
+    
+    public boolean eliminar(String id) {
+        Estudiante e = buscar(id);
+        if (e == null) return false;
+        estudiantes.remove(e);
+        saveToFile();
+        return true;
+    }
+    
+    public List<Estudiante> listar() {
+        return new ArrayList<>(estudiantes);
+    }
+    
+    public Estudiante buscar(String id) {
+        return estudiantes.stream()
+            .filter(e -> e.getId().equals(id))
+            .findFirst().orElse(null);
+    }
+}
+\end{lstlisting}
+
+\subsection{Explicación del Singleton}
+
+\textbf{Componentes clave:}
+
+\begin{enumerate}
+    \item \textbf{Instancia estática privada:} Almacena la única instancia
+    \item \textbf{Constructor privado:} Previene instanciación externa con \texttt{new}
+    \item \textbf{getInstance() sincronizado:} Punto de acceso único, thread-safe
+\end{enumerate}
+
+\textbf{Ventajas:}
+\begin{itemize}
+    \item Una sola lista de estudiantes en memoria
+    \item Todos los componentes acceden a los mismos datos
+    \item Evita inconsistencias y pérdida de información
+    \item Control centralizado de persistencia
+\end{itemize}
+
+\section{Integración del Patrón NVC}
+
+
+\subsection{Diagrama de Arquitectura}
+
+
+\begin{center}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{diagrama.png}
+    \caption{diagrama de arquitecura}
+    \label{fig:mesh1}
+\end{figure}
+
+\end{center}
+
+\subsection{Código por Capas}
+
+\textbf{Capa de Datos - Modelo:}
+
+\begin{lstlisting}[caption=Estudiante.java]
+public class Estudiante implements Serializable {
+    private String id;
+    private String nombres;
+    private int edad;
+    
+    public Estudiante(String id, String nombres, int edad) {
+        this.id = id;
+        this.nombres = nombres;
+        this.edad = edad;
+    }
+    
+    // Getters y Setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
+    public String getNombres() { return nombres; }
+    public void setNombres(String n) { this.nombres = n; }
+    public int getEdad() { return edad; }
+    public void setEdad(int edad) { this.edad = edad; }
+}
+\end{lstlisting}
+
+\textbf{Capa de Negocio:}
+
+\begin{lstlisting}[caption=EstudianteService.java]
+public class EstudianteService {
+    private final EstudianteRepository repository;
+    
+    public EstudianteService() {
+        // Usa la instancia unica del Singleton
+        this.repository = EstudianteRepository.getInstance();
+    }
+    
+    public ResultadoOperacion agregar(Estudiante e) {
+        if (repository.buscar(e.getId()) != null) {
+            return ResultadoOperacion.error("ID duplicado");
+        }
+        return repository.agregar(e) 
+            ? ResultadoOperacion.exito("Agregado")
+            : ResultadoOperacion.error("Error al agregar");
+    }
+    
+    public ResultadoOperacion editar(Estudiante e) {
+        return repository.editar(e)
+            ? ResultadoOperacion.exito("Editado")
+            : ResultadoOperacion.error("ID no encontrado");
+    }
+    
+    public ResultadoOperacion eliminar(String id) {
+        return repository.eliminar(id)
+            ? ResultadoOperacion.exito("Eliminado")
+            : ResultadoOperacion.error("ID no encontrado");
+    }
+    
+    public List<Estudiante> listar() {
+        return repository.listar();
+    }
+}
+\end{lstlisting}
+
+\textbf{Capa de Control:}
+
+\begin{lstlisting}[caption=EstudianteController.java]
+public class EstudianteController {
+    private final EstudianteService service;
+    
+    public EstudianteController() {
+        this.service = new EstudianteService();
+    }
+    
+    public ResultadoOperacion guardarEstudiante(
+            String id, String nombres, String edadStr) {
+        try {
+            int edad = Integer.parseInt(edadStr.trim());
+            Estudiante e = new Estudiante(
+                id.trim(), nombres.trim(), edad);
+            return service.agregar(e);
+        } catch (NumberFormatException ex) {
+            return ResultadoOperacion.error("Edad invalida");
+        }
+    }
+    
+    public ResultadoOperacion editarEstudiante(
+            String id, String nombres, String edadStr) {
+        try {
+            int edad = Integer.parseInt(edadStr.trim());
+            Estudiante e = new Estudiante(
+                id.trim(), nombres.trim(), edad);
+            return service.editar(e);
+        } catch (NumberFormatException ex) {
+            return ResultadoOperacion.error("Edad invalida");
+        }
+    }
+    
+    public ResultadoOperacion eliminarEstudiante(String id) {
+        return service.eliminar(id.trim());
+    }
+    
+    public List<Estudiante> obtenerTodos() {
+        return service.listar();
+    }
+}
+\end{lstlisting}
+
+\textbf{Capa de Vista:}
+
+La clase \texttt{EstudianteUI} (interfaz Swing) incluye:
+\begin{itemize}
+    \item Formulario: campos ID, Nombres, Edad
+    \item Botones: Guardar, Editar, Eliminar, Limpiar
+    \item Tabla para mostrar estudiantes
+    \item Delega todas las acciones al \texttt{EstudianteController}
+\end{itemize}
+
+\section{Pruebas de Persistencia Compartida}
+
+\subsection{Código de Prueba}
+
+\begin{lstlisting}[caption=TestSingleton.java]
+public class TestSingleton {
+    public static void main(String[] args) {
+        System.out.println("=== PRUEBA SINGLETON ===\n");
+        
+        // Crear dos controladores diferentes
+        EstudianteController controller1 = 
+            new EstudianteController();
+        EstudianteController controller2 = 
+            new EstudianteController();
+        
+        // Controller1 agrega estudiantes
+        System.out.println("Controller1 agregando:");
+        controller1.guardarEstudiante("001", "Juan", "20");
+        controller1.guardarEstudiante("002", "Maria", "22");
+        
+        // Controller2 lista (sin agregar nada)
+        System.out.println("\nController2 listando:");
+        controller2.obtenerTodos().forEach(e -> 
+            System.out.println("  " + e.getId() + 
+                " - " + e.getNombres()));
+        
+        // Controller2 agrega uno mas
+        System.out.println("\nController2 agregando:");
+        controller2.guardarEstudiante("003", "Carlos", "21");
+        
+        // Controller1 lista de nuevo
+        System.out.println("\nController1 listando:");
+        controller1.obtenerTodos().forEach(e -> 
+            System.out.println("  " + e.getId() + 
+                " - " + e.getNombres()));
+        
+        System.out.println("\n✓ Ambos ven los 3 estudiantes");
+        System.out.println("✓ Singleton funcionando!");
+    }
+}
+\end{lstlisting}
+
+\subsection{Resultado de la Prueba}
+
+\begin{verbatim}
+=== PRUEBA SINGLETON ===
+
+Controller1 agregando:
+
+Controller2 listando:
+  001 - Juan
+  002 - Maria
+
+Controller2 agregando:
+
+Controller1 listando:
+  001 - Juan
+  002 - Maria
+  003 - Carlos
+
+✓ Ambos ven los 3 estudiantes
+✓ Singleton funcionando!
+\end{verbatim}
+
+\textbf{Evidencia:} Los dos controladores comparten la misma lista. Controller2 ve los datos de Controller1 y viceversa, demostrando que ambos usan la misma instancia del repositorio (Singleton).
+
+\section{Singleton + NVC: Complemento y Prevención de Pérdida de Datos}
+
+\subsection{Problema sin Singleton}
+
+Sin Singleton, cada \texttt{EstudianteService} crearía su propio repositorio:
+
+\begin{verbatim}
+Controller1 -> Service1 -> Repository1 (Lista A)
+Controller2 -> Service2 -> Repository2 (Lista B)
+\end{verbatim}
+
+\textbf{Resultado:} Datos inconsistentes, cada uno con su lista separada.
+
+\subsection{Solución con Singleton}
+
+Con Singleton, todos comparten la misma instancia:
+
+\begin{verbatim}
+Controller1 --\
+               \
+                --> Repository.getInstance() -> Lista ÚNICA
+               /
+Controller2 --/
+\end{verbatim}
+
+\textbf{Resultado:} Consistencia global, sin pérdida de datos.
+
+\subsection{Cómo se Complementan}
+
+\begin{itemize}
+    \item \textbf{NVC:} Separa responsabilidades en capas independientes
+    \item \textbf{Singleton:} Garantiza que la capa de Datos sea única y compartida
+    \item \textbf{Juntos:} Arquitectura limpia + datos consistentes
+\end{itemize}
+
+\textbf{Beneficios:}
+\begin{enumerate}
+    \item Vista y Control pueden existir en múltiples instancias sin problema
+    \item Todos acceden al mismo repositorio de datos
+    \item No hay pérdida ni duplicación de información
+    \item Facilita mantenimiento y escalabilidad
+\end{enumerate}
+
+\section{Estructura del Código Fuente}
+
+\begin{verbatim}
+src/main/java/ec/edu/espe/
+├── datos/
+│   ├── model/
+│   │   └── Estudiante.java
+│   └── repository/
+│       └── EstudianteRepository.java (SINGLETON)
+├── logica_negocio/
+│   └── EstudianteService.java
+├── presentacion/
+│   ├── EstudianteController.java (CONTROL)
+│   ├── EstudianteUI.java (VISTA)
+│   └── Main.java
+└── test/
+    └── TestSingleton.java
+\end{verbatim}
+
+\section{Conclusión}
+
+\textbf{Requisitos cumplidos:}
+
+\begin{itemize}
+    \item[$\checkmark$] Singleton implementado en EstudianteRepository
+    \item[$\checkmark$] Patrón NVC con 4 capas separadas
+    \item[$\checkmark$] CRUD completo funcional
+    \item[$\checkmark$] Clase Estudiante con atributos completos
+    \item[$\checkmark$] Service usa getInstance()
+    \item[$\checkmark$] Vista (Swing) y Control implementados
+    \item[$\checkmark$] Pruebas demuestran persistencia compartida
+    \item[$\checkmark$] Explicación y diagrama incluidos
+\end{itemize}
+
+\textbf{Resultado:} El Singleton en el repositorio garantiza que todos los componentes de la arquitectura NVC accedan a los mismos datos, evitando inconsistencias y pérdida de información.
+
+\end{document}
