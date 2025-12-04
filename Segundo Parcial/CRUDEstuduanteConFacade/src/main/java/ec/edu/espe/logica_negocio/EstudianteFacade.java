@@ -7,9 +7,6 @@ import java.util.Optional;
 
 
 
-// Proporciona una interfaz simplificada y unificada para el subsistema de gestión de estudiantes.
- 
-
 public class EstudianteFacade {
     private final EstudianteRepository repo;
     private final EstudianteService service;

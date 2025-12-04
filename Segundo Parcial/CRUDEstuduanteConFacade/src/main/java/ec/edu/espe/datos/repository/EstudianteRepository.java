@@ -6,12 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repositorio de Estudiantes.
-
- * Ahora funciona como un Data Access Object (DAO) sin estado en memoria,
- *.
- */
 public class EstudianteRepository {
     private static final String STORAGE_FILE = "students.ser";
 

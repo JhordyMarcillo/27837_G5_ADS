@@ -25,7 +25,7 @@ public class EstudianteController {
         try {
             int edad = Integer.parseInt(edadStr.trim());
 
-            // 🚀 USANDO FACTORY
+            // USANDO FACTORY
             Estudiante e = EstudianteFactory.crear(id.trim(), nombres.trim(), edad);
 
             return service.agregar(e);
@@ -41,7 +41,7 @@ public class EstudianteController {
         try {
             int edad = Integer.parseInt(edadStr.trim());
 
-            // 🚀 USANDO FACTORY
+            // USANDO FACTORY
             Estudiante e = EstudianteFactory.crear(id.trim(), nombres.trim(), edad);
 
             return service.editar(e);
