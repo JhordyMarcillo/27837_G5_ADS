@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: plantilla(~{::content})}">
+<body>
+<div th:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
+        <div>
+            <h2 class="fw-bold text-dark"><i class="bi text-danger me-2"></i>Registro de Donaciones</h2>
+            <p class="text-muted">Gestiona los ingresos de la fundación</p>
+        </div>
+        <div class="btn-group shadow-sm">
+            <a href="#" class="btn btn-primary active">
+                <i class="bi bi-plus-circle me-1"></i> Registrar Ingreso
+            </a>
+            <a th:href="@{/egresos}" class="btn btn-outline-primary bg-white">
+                <i class="bi bi-dash-circle me-1"></i> Registrar Egreso
+            </a>
+        </div>
+    </div>
+
+    <div class="card mb-5 border-0 shadow-md fade-in-up" style="animation-delay: 0.1s;">
+        <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+            <h5 class="fw-bold text-primary">Nueva Donación</h5>
+        </div>
+        <div class="card-body px-4 pb-4">
+            <form th:action="@{/donaciones}" th:object="${donacion}" method="post">
+                <div class="row g-4">
+
+                    <div class="col-lg-6 border-end-lg">
+
+                        <div class="mb-4">
+                            <label class="form-label text-muted fw-semibold small text-uppercase">Tipo de ingreso</label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check custom-radio">
+                                    <input class="form-check-input" type="radio" name="tipoDonacion" id="radioEfectivo" value="EFECTIVO" checked onclick="toggleFormulario()">
+                                    <label class="form-check-label fw-bold" for="radioEfectivo">
+                                        <i class="bi bi-cash-coin text-success me-1"></i> Efectivo
+                                    </label>
+                                </div>
+                                <div class="form-check custom-radio">
+                                    <input class="form-check-input" type="radio" name="tipoDonacion" id="radioEspecie" value="ESPECIE" onclick="toggleFormulario()">
+                                    <label class="form-check-label fw-bold" for="radioEspecie">
+                                        <i class="bi bi-box-seam text-warning me-1"></i> Especie
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label id="labelNombre" class="form-label fw-semibold">Nombre del Donante</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                                <input type="text" th:field="*{donante}" class="form-control bg-light border-start-0 ps-0" placeholder="Ej: Juan Pérez o Empresa X" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label id="labelFecha" class="form-label fw-semibold">Fecha de Donación</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-calendar"></i></span>
+                                <input type="date" th:field="*{fechaDonacion}" class="form-control bg-light border-start-0 ps-0" required>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-lg-6 ps-lg-4">
+
+
+                        <div id="bloqueEfectivo" class="animate-fade">
+                            <div class="p-3 bg-success bg-opacity-10 rounded border border-success border-opacity-25 mb-3">
+                                <h6 class="text-success fw-bold mb-3"><i class="bi bi-cash me-2"></i>Detalles Monetarios</h6>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Monto ($)</label>
+                                    <input type="number" step="0.01" id="inputMonto" th:field="*{monto}" class="form-control form-control-lg fw-bold text-success" placeholder="0.00">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="bloqueEspecie" class="animate-fade" style="display: none;">
+                            <div class="p-3 bg-warning bg-opacity-10 rounded border border-warning border-opacity-25 mb-3">
+                                <h6 class="text-warning text-dark fw-bold mb-3"><i class="bi bi-box me-2"></i>Detalles de Especie</h6>
+
+                                <div class="mb-0">
+                                    <label class="form-label fw-semibold">Cantidad / Valor Estimado</label>
+                                    <input type="number" id="inputCantidad" class="form-control form-control-lg fw-bold" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Descripción / Notas</label>
+                            <textarea th:field="*{descripcion}" class="form-control bg-light" rows="2" placeholder="Detalles adicionales..."></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                    <a th:href="@{/}" class="btn btn-light px-4">Cancelar</a>
+                    <button type="submit" class="btn btn-primary px-5 shadow-sm">
+                        <i class="bi bi-save me-2"></i> Registrar Donación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-md fade-in-up" style="animation-delay: 0.2s;">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4">
+            <h5 class="mb-0 fw-bold text-secondary">Historial Reciente</h5>
+            <span class="badge bg-light text-dark border">
+                Total Registros: <span th:text="${listaDonaciones.size()}">0</span>
+            </span>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                    <tr>
+                        <th class="ps-4">Fecha</th>
+                        <th>Donante</th>
+                        <th>Tipo</th>
+                        <th class="text-end pe-4">Monto</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="d : ${listaDonaciones}">
+                        <td class="ps-4 text-muted" th:text="${d.fechaDonacion}"></td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-initials bg-primary bg-opacity-10 text-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 35px; height: 35px; font-weight: bold;">
+                                    <i class="bi bi-person"></i>
+                                </div>
+                                <span th:text="${d.donante}" class="fw-medium"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <span th:if="${d.tipoDonacion == 'EFECTIVO'}" class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Efectivo</span>
+                            <span th:if="${d.tipoDonacion == 'ESPECIE'}" class="badge bg-warning bg-opacity-10 text-dark border border-warning border-opacity-25">Especie</span>
+                            <span th:if="${d.tipoDonacion == null}" class="badge bg-secondary">-</span>
+                        </td>
+                        <td class="text-end pe-4 fw-bold text-dark" th:text="${'$ ' + d.monto}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div th:if="${listaDonaciones.isEmpty()}" class="text-center py-5">
+                    <i class="bi bi-inbox text-muted display-4 mb-3 d-block opacity-50"></i>
+                    <p class="text-muted">No hay donaciones registradas aún.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script th:fragment="scripts">
+    function toggleFormulario() {
+        const radioEfectivo = document.getElementById('radioEfectivo');
+        const bloqueEfectivo = document.getElementById('bloqueEfectivo');
+        const bloqueEspecie = document.getElementById('bloqueEspecie');
+        const labelNombre = document.getElementById('labelNombre');
+        const inputMonto = document.getElementById('inputMonto');
+        const inputCantidad = document.getElementById('inputCantidad');
+
+        if (radioEfectivo.checked) {
+            bloqueEfectivo.style.display = 'block';
+            bloqueEspecie.style.display = 'none';
+            labelNombre.innerText = "Nombre del Donante";
+
+            inputMonto.setAttribute('name', 'monto');
+            inputCantidad.removeAttribute('name');
+            inputMonto.required = true;
+            inputCantidad.required = false;
+        } else {
+            bloqueEfectivo.style.display = 'none';
+            bloqueEspecie.style.display = 'block';
+            labelNombre.innerText = "Nombre del Benefactor"; // Pequeño cambio visual
+
+            inputMonto.removeAttribute('name');
+            inputCantidad.setAttribute('name', 'monto');
+            inputMonto.required = false;
+            inputCantidad.required = true;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleFormulario();
+
+        // Animación simple de entrada
+        const elements = document.querySelectorAll('.fade-in-up');
+        elements.forEach(el => el.classList.add('show'));
+    });
+</script>
+
+<style>
+    /* Estilos Adicionales Específicos para esta página */
+    .border-end-lg {
+        border-right: 1px solid #eee;
+    }
+    @media (max-width: 992px) {
+        .border-end-lg { border-right: none; border-bottom: 1px solid #eee; padding-bottom: 2rem; margin-bottom: 2rem; }
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.15);
+    }
+
+    .animate-fade {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-in-up.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+</body>
+</html>
