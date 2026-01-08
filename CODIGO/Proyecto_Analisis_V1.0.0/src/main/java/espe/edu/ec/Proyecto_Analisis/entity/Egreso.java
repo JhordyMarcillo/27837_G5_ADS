@@ -4,37 +4,32 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "donaciones")
+@Table(name = "egresos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Donacion {
+public class Egreso {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Campos originales
-    private String donante;
-    private BigDecimal monto;
+    @Column(nullable = false)
+    private String beneficiario;
 
-    @Column(columnDefinition = "DATE")
-    private LocalDate fechaDonacion;
+    @Column(nullable = false)
+    private BigDecimal monto;
 
     @Column(columnDefinition = "TEXT")
     private String descripcion;
 
-    private String tipoDonacion;
+    @Column(nullable = false)
+    private LocalDate fechaEgreso;
 
-    private String numeroDocumento;
-    private String ruc;
-    private String cuentaBanco;
-
-    // Auditoría
-    private LocalDate fechaRegistro = LocalDate.now();
+    @Column(nullable = false)
+    private String categoria;
 }
