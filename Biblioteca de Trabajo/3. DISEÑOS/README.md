@@ -1,1 +1,5 @@
-# 27837_G5_ADS
+## Versiones y Variantes
+
+| Código del ECS | Descripción del ECS                                                       | Versión / Variante | Autor(es)  |                 Localización                             |              Observaciones                         |                   Variante de requisitos de usuario                                              | Variante de plataforma |  |
+|----------------|---------------------------------------------------------------------------|--------------------|-------------------|-------------------------------------------------------|--------------------------------------------------|--------------------------------------------------------------------------------|----------------------------------|------------------------|
+| PAT            | Implementación del patrón de diseño Modelo Vista Controlador               | V1.0.0                     | Dennison Chalacan, Jeffrey Manobanda, Jhordy Marcillo | 27837_G5_ADS/DISEÑOS         | Creación del patrón de diseño usando MVC para el desarrollo de la aplicación Kontably | Español                          | Windows 11             |
