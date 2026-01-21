@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: plantilla(~{::content})}">
+<body>
+<div th:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 fade-in-up">
+        <div>
+            <h2 class="fw-bold text-dark">
+                <i class="bi text-danger me-2"></i>Registro de Egresos
+            </h2>
+            <p class="text-muted">Control de gastos y salidas de la fundación</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-md fade-in-up" style="animation-delay: 0.1s;">
+                <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                    <h5 class="fw-bold text-danger">
+                        <i class="bi bi-pencil-square me-2"></i>Nuevo Egreso
+                    </h5>
+                </div>
+                <div class="card-body px-4 pb-4">
+                    <form th:action="@{/egresos}" th:object="${egreso}" method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Beneficiario</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-danger"><i class="bi bi-person"></i></span>
+                                <input type="text" th:field="*{beneficiario}" class="form-control bg-light border-start-0 ps-0" required placeholder="A quién pagamos">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Categoría</label>
+                            <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-danger">
+                                <i class="bi bi-tag"></i>
+                            </span>
+                                <select th:field="*{categoria}" class="form-select bg-light border-start-0 ps-0" required>
+                                    <option value="" selected disabled>Seleccione el tipo de gasto...</option>
+                                    <option value="SERVICIOS_BASICOS">Servicios Básicos</option>
+                                    <option value="ALIMENTACION">Alimentación</option>
+                                    <option value="SALUD">Salud / Medicinas</option>
+                                    <option value="OPERATIVO">Gastos Operativos</option>
+                                    <option value="OTROS">Otros</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Monto</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-danger"><i class="bi bi-currency-dollar"></i></span>
+                                <input type="number" step="0.01" th:field="*{monto}" class="form-control bg-light border-start-0 ps-0" required placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-secondary">Fecha</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0 text-danger"><i class="bi bi-calendar-event"></i></span>
+                                <input type="date" th:field="*{fechaEgreso}" class="form-control bg-light border-start-0 ps-0" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold text-secondary">Descripción</label>
+                            <textarea th:field="*{descripcion}" class="form-control bg-light" rows="3" placeholder="Detalles del gasto..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger w-100 py-2 shadow-sm fw-bold">
+                            <i class="bi bi-save me-2"></i> Registrar Salida
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-md fade-in-up" style="animation-delay: 0.2s;">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3 px-4">
+                    <h5 class="mb-0 fw-bold text-secondary">Historial de Gastos</h5>
+                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">
+                        <i class="bi bi-list-ul me-1"></i> Registros
+                    </span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4 text-secondary">Fecha</th>
+                                <th class="text-secondary">Beneficiario</th>
+                                <th class="text-secondary">Descripción</th>
+                                <th class="text-end pe-4 text-secondary">Monto</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="e : ${listaEgresos}">
+                                <td class="ps-4 text-muted fw-medium" th:text="${e.fechaEgreso}"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-initials bg-danger bg-opacity-10 text-danger rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="bi bi-bag"></i>
+                                        </div>
+                                        <span th:text="${e.beneficiario}" class="fw-medium text-dark"></span>
+                                    </div>
+                                </td>
+                                <td class="text-muted small" th:text="${e.descripcion}"></td>
+                                <td class="text-end pe-4 fw-bold text-danger" th:text="${'- $ ' + e.monto}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div th:if="${listaEgresos.isEmpty()}" class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="bi bi-wallet2 text-muted display-4 opacity-25"></i>
+                            </div>
+                            <h6 class="text-muted fw-bold">No hay egresos registrados aún.</h6>
+                            <p class="text-muted small">Los gastos que registres aparecerán aquí.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:fragment="scripts">
+    // Script simple para activar animaciones al cargar
+    document.addEventListener("DOMContentLoaded", function() {
+        const elements = document.querySelectorAll('.fade-in-up');
+        elements.forEach(el => el.classList.add('show'));
+    });
+</script>
+
+<style>
+    /* Animaciones suaves */
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    .fade-in-up.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Focus en inputs */
+    .form-control:focus {
+        border-color: #e74c3c; /* Color Danger suave */
+        box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.15);
+    }
+</style>
+
+</body>
+</html>
