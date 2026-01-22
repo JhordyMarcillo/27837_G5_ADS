@@ -21,7 +21,6 @@
 | VAL-013 | Valor decimal inválido | "Debe ser un número con máximo 2 decimales" | Formatear correctamente |
 | VAL-014 | Campo duplicado | "Ya existe un registro con estos datos" | Verificar unicidad |
 
-C:\Users\Acer\Documents\ESPE\6to 7mo\Analisis y diseño\27837_G5_ADS\CODIGO\Proyecto_Analisis_V1.4.0
 
 #### 1.2 Validaciones de Negocio
 
@@ -320,87 +319,6 @@ C:\Users\Acer\Documents\ESPE\6to 7mo\Analisis y diseño\27837_G5_ADS\CODIGO\Proy
 | INFO-004 | Exportación completada |
 | INFO-005 | Copiado al portapapeles |
 | INFO-006 | El registro ha sido procesado |
-
----
-
-## 📈 Formato de Reporte Semanal
-
-### Resumen de Errores Encontrados
-
-| Semana | Total Errores | Críticos | Altas | Medias | Bajas | Resueltos | Pendientes |
-|--------|---------------|----------|-------|--------|-------|-----------|------------|
-| 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 2 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Total | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-
-### Estado de Errores por Módulo
-
-| Módulo | Encontrados | Resueltos | Pendientes | % Resuelto |
-|--------|-------------|-----------|------------|------------|
-| Auth | 0 | 0 | 0 | 0% |
-| Donaciones | 0 | 0 | 0 | 0% |
-| Usuarios | 0 | 0 | 0 | 0% |
-| Egresos | 0 | 0 | 0 | 0% |
-| Reportes | 0 | 0 | 0 | 0% |
-| Exportación | 0 | 0 | 0 | 0% |
-
----
-
-## ✅ Plantilla de Cierre de Error
-
-```
-ID: ERR-[MODULO]-[NUMERO]
-Fecha de cierre: [YYYY-MM-DD]
-Cerrado por: [Nombre del developer]
-
-Solución implementada:
-[Descripción de cómo se resolvió el error]
-
-Verificación:
-[Descripción de cómo se verificó la solución]
-
-¿El error está resuelto? [Sí/No]
-¿Se requieren más pruebas? [Sí/No]
-```
-
----
-
-## 📝 Bitácora de Errores
-
-### Ejemplo de Registro
-
-| ID | Fecha | Módulo | Descripción | Severidad | Estado |
-|----|-------|--------|-------------|-----------|--------|
-| ERR-AUTH-001 | 2024-01-15 | Auth | Login falla con credenciales válidas | Crítica | Resuelto |
-| ERR-DON-002 | 2024-01-16 | Donaciones | Error al actualizar donación | Alta | En proceso |
-| ERR-USR-003 | 2024-01-17 | Usuarios | No valida username duplicado | Media | Pendiente |
-
----
-
-## 🎯 Métricas de Calidad
-
-### Objetivos
-
-- **Errores Críticos:** 0 tolerados, resolver en < 24 horas
-- **Errores Altos:** < 5 activos, resolver en < 72 horas
-- **Errores Medios:** < 10 activos, resolver en < 1 semana
-- **Errores Bajos:** < 15 activos, resolver en < 2 semanas
-
-### Indicadores de Éxito
-
-- Tasa de resolución de errores críticos: 100%
-- Tasa de resolución de errores altos: 95%
-- Tiempo promedio de resolución: < 48 horas
-- Reopen rate: < 5%
-
----
-
-## 📞 Contacto para Reportes
-
-**Responsable de Calidad:** [Nombre]
-**Email:** [correo@ejemplo.com]
-**Slack/Teams:** [canal]
 
 ---
 

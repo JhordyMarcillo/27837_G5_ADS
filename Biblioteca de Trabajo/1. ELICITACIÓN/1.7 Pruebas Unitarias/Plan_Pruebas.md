@@ -2,7 +2,7 @@
 
 ## Descripción del Documento
 
-Este documento define el plan de pruebas generales para el Sistema de Gestión de Donaciones, diseñado para ser ejecutado en Postman. El plan abarca todas las funcionalidades del sistema y proporciona una guía detallada para las pruebas de API.
+El presente documento define el plan de pruebas generales para el Sistema Contable de la Fundación Niños con destino en las manos de Dios de, diseñado para ser ejecutado en Postman. El plan abarca todas las funcionalidades del sistema y proporciona una guía detallada para las pruebas de API.
 
 **Versión del Documento:** 1.0.0  
 **Proyecto:** 27837_G5_ADS - Kontably
