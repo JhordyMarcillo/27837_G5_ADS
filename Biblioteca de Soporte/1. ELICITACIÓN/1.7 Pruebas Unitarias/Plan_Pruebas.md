@@ -1,6 +1,6 @@
 # Plan de Pruebas en Postman - Kontably
 
-## 📋 Descripción del Documento
+## Descripción del Documento
 
 Este documento define el plan de pruebas generales para el Sistema de Gestión de Donaciones, diseñado para ser ejecutado en Postman. El plan abarca todas las funcionalidades del sistema y proporciona una guía detallada para las pruebas de API.
 
@@ -9,7 +9,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-## 🎯 Indices de las pruebas
+## Indices de las pruebas
 
 1. **Validar autenticación de los diferentes usuarios (Tesorera y Coordinadora)** 
 2. **Verificar operaciones CRUD para donaciones y para los egresos** 
@@ -21,9 +21,9 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-## 📁 Estructura de Colecciones en Postman
+## Estructura de Colecciones en Postman
 
-### 1. 🔐 Autenticación (Auth)
+### 1. Autenticación (Auth)
 
 #### 1.1 Login de Usuario
 - **Endpoint:** `POST /api/auth/login`
@@ -159,7 +159,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-### 2. 📦 Donaciones
+### 2. Donaciones
 
 #### 2.1 Registro de Donaciones
 - **Endpoint:** `POST /api/donaciones`
@@ -419,7 +419,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-### 3. 👥 Gestión de Usuarios
+### 3. Gestión de Usuarios
 
 #### 3.1 Listar Usuarios
 - **Endpoint:** `GET /api/usuarios`
@@ -597,7 +597,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-### 4. 💸 Egresos
+### 4. Egresos
 
 #### 4.1 Registrar Egreso
 - **Endpoint:** `POST /api/egresos`
@@ -711,7 +711,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-### 5. 📊 Reportes
+### 5. Reportes
 
 #### 5.1 Reporte de Ingresos
 - **Endpoint:** `GET /api/reportes/ingresos`
@@ -833,7 +833,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-### 6. 📤 Exportación
+### 6. Exportación
 
 #### 6.1 Exportar Reporte a Excel
 - **Endpoint:** `GET /api/exportar/excel`
@@ -897,7 +897,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-## 🧪 Matriz de Pruebas Resumida
+## Matriz de Pruebas Resumida
 
 | Módulo | Caso de Prueba | Método | Endpoint | Prioridad |
 |--------|----------------|--------|----------|-----------|
@@ -938,7 +938,7 @@ Este documento define el plan de pruebas generales para el Sistema de Gestión d
 
 ---
 
-## 📝 Variables de Entorno Postman
+## Variables de Entorno Postman
 
 Crear las siguientes variables de entorno en Postman:
 
@@ -955,7 +955,7 @@ Crear las siguientes variables de entorno en Postman:
 
 ---
 
-## 🔄 Flujos de Prueba Recomendados
+##  Flujos de Prueba Recomendados
 
 ### Flujo 1: Login y Autenticación
 1. AUT-001 → AUT-002 → AUT-003 → AUT-004 → AUT-005 → AUT-006
@@ -987,43 +987,6 @@ Crear las siguientes variables de entorno en Postman:
 2. EXP-001 (exportar Excel)
 3. EXP-002 (exportar PDF)
 4. EXP-003 (exportar CSV)
-
----
-
-## ⚠️ Casos de Borde a Considerar
-
-1. **Campos nulos o vacíos** en todas las operaciones POST/PUT
-2. **Valores numéricos negativos** para cantidad, monto, etc.
-3. **IDs inexistentes** en operaciones GET/PUT/DELETE
-4. **Tokens expirados** o malformados
-5. **Permisos insuficientes** (Tesorera intentando acceder a gestión de usuarios)
-6. **Campos con caracteres especiales** en nombres y descripciones
-7. **Fechas inválidas** o fuera de rango
-8. **Exportación sin datos** disponibles
-
----
-
-## 📊 Métricas de Éxito
-
-- **100%** de casos de prueba de autenticación aprobados
-- **95%** de casos de prueba de donaciones aprobados
-- **90%** de casos de prueba de gestión de usuarios aprobados
-- **100%** de coverage en endpoints críticos
-
----
-
-## 📅 Próximos Pasos
-
-1. [ ] Configurar colección Postman con todos los endpoints
-2. [ ] Configurar variables de entorno
-3. [ ] Implementar scripts de pre-request para autenticación automática
-4. [ ] Ejecutar pruebas de autenticación
-5. [ ] Ejecutar pruebas de donaciones
-6. [ ] Ejecutar pruebas de usuarios
-7. [ ] Ejecutar pruebas de egresos
-8. [ ] Ejecutar pruebas de reportes
-9. [ ] Ejecutar pruebas de exportación
-10. [ ] Generar reporte de resultados
 
 ---
 
